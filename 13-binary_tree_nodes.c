@@ -1,31 +1,49 @@
 #include "binary_trees.h"
 
 /**
- * binary_tree_leaf - checks if node is leaf
- * @node: pointer to node to check
+ * binary_tree_nodes - counts the nodes with at least 1 child in a binary tree
+ * @tree: tree to count the nodes from
  *
- * Return: 1 if node is leaf, otherwose 0 or if node is NULL
- */
-int binary_tree_leaf(const binary_tree_t *node)
-{
-	if (node != NULL && node->left == NULL && node->right == NULL)
-		return (1);
-	return (0);
-}
-
-/**
- * binary_tree_node - counts the nodes with at least 1 child in a binary tree
- * @tree: pointer to root of the node
- *
- * Return: numberr, otherwise 0
+ * Return: number of nodes counted
+ *         0 if tree is NULL
  */
 size_t binary_tree_nodes(const binary_tree_t *tree)
 {
-	size_t left, right;
-
-	if (tree == NULL || binary_tree_leaf(tree))
+	if (!tree || (!tree->left && !tree->right))
 		return (0);
-	left = binary_tree_nodes(tree->left);
-	right = binary_tree_nodes(tree->right);
-	return (1 + left + right);
+
+	return (binary_tree_size(tree) - binary_tree_leaves(tree));
+}
+
+/**
+ * binary_tree_size - measures the size of a binary tree
+ * @tree: tree to measure the size of
+ *
+ * Return: size of the tree
+ *         0 if tree is NULL
+ */
+size_t binary_tree_size(const binary_tree_t *tree)
+{
+	if (!tree)
+		return (0);
+
+	return (binary_tree_size(tree->left) + binary_tree_size(tree->right) + 1);
+}
+
+/**
+ * binary_tree_leaves - counts the leaves in a binary tree
+ * @tree: tree to count the leaves from
+ *
+ * Return: number of leaves
+ *         0 if tree is NULL
+ */
+size_t binary_tree_leaves(const binary_tree_t *tree)
+{
+	if (!tree)
+		return (0);
+
+	if (!tree->left && !tree->right)
+		return (1);
+
+	return (binary_tree_leaves(tree->left) + binary_tree_leaves(tree->right));
 }
